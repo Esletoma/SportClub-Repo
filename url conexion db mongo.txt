@@ -1,0 +1,15 @@
+Conexión BD
+
+mongodb+srv://alejaguz30:09301992Aa@@sportclubactivity.kkrc1.mongodb.net/sportclubActivity?retryWrites=true&w=majority
+
+Correr app en IntelliJ
+mvnw spring-boot:run
+
+Empaquetar
+mvnw package
+
+Crear imagen Docker
+heroku container:login
+
+Crear app en Heroku
+heroku create actividades-ms
