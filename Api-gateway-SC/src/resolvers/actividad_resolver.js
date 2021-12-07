@@ -33,7 +33,7 @@ const actividadResolver = {
             }
             
             
-        }
+        },
     },
 };
-module.exports = accountResolver;
+module.exports = actividadResolver;

@@ -1,8 +1,8 @@
 const { gql } = require('apollo-server');
-const accountTypeDefs = gql `
+const horarioTypeDefs = gql `
 
     type Horario {
-        id: String!
+        id: String
         dia: String!
         hora: Int!
         min: Int! 
@@ -15,7 +15,7 @@ const accountTypeDefs = gql `
     }
 
     extend type Query {
-        horarios(): [Horario]
+        horarios: [Horario]
         horariosByDia(dia: String!): [Horario]
 
     }

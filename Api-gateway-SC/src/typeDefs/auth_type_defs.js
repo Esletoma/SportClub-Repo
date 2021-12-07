@@ -18,10 +18,9 @@ const authTypeDefs = gql `
     input SignUpInput {
         username: String!
         password: String!
-        name: String!
-        email: String!
+        email: String
         tipo: Int!
-        plan: Int!
+        plan: Int
     }
     
     type UserDetail {

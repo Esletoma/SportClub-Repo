@@ -10,7 +10,6 @@ const usersResolver = {
       const authInput = {
         username: userInput.username,
         password: userInput.password,
-        name: userInput.name,
         email: userInput.email,
         tipo: userInput.tipo,
         plan: userInput.plan,
