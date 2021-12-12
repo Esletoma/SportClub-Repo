@@ -1,7 +1,9 @@
 <template>
+
   <div class="logIn_user">
     <div class="container_logIn_user">
       <h2>Iniciar sesión</h2>
+
       <form v-on:submit.prevent="processLogInUser" >
         <input type="text" v-model="user.username" placeholder="Username">
         <br>
@@ -10,12 +12,13 @@
         <button type="submit">Iniciar Sesion</button>
       </form>
     </div>
+
   </div>
+
 </template>
 
 <script>
-import jwt_decode from "jwt-decode";
-import axios from 'axios';
+import gql from "graphql-tag";
 
 export default {
   name: "LogIn",
@@ -26,62 +29,41 @@ export default {
       user: {
         username:"",
         password:"",
-      }
-    }
+      },
+    };
   },
 
   methods: {
-    processLogInUser: function(){
-      
-      //alert("entró a process ")
-      axios.post(
-        "http://127.0.0.1:8000/login/",
-        this.user,
-        {headers: {}}
-        )
-        
+    processLogInUser: async function(){
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($credentials: CredentialsInput!) {
+              logIn(credentials: $credentials) {
+                refresh
+                access
+              }
+            }
+          `,
+          variables: {
+            credentials: this.user,
+          },
+        })
         .then((result) => {
-          //alert("crear datos");
-          let dataLogIn = {
-            
+          let dataLogIn = {            
             username: this.user.username,
             token_access: result.data.access,
             token_refresh: result.data.refresh,
             tipo: this.tipo,
           }
-          //this.$emit('completedLogIn', dataLogIn);
-          this.cargarUsuario(dataLogIn);
+
+          this.$emit('completedLogIn', dataLogIn);
         })
         .catch((error) => {
-          if (error.response.status == "401")
-            alert("ERROR 401: Credenciales Incorrectas.");
-          else
-            alert("ERROR: "+ error);
+          alert("ERROR 401: Credenciales Incorrectas.");
         });
     },
-    cargarUsuario: function(dataL){
-      alert("entró a cargar usuario");
-            let token = dataL.token_access;
-            //alert("token: "+ token);
-            let userId = jwt_decode(token).user_id.toString();
-            //alert("UserID: "+ userId);
-
-            axios.get(`http://127.0.0.1:8000/user/${userId}/`, 
-            {headers: {'Authorization': `Bearer ${token}`}})
-
-                .then((result) => {            
-                    alert("tipo: "+ result.data.tipo);
-                    dataL.tipo = result.data.tipo;
-                    this.$emit('completedLogIn', dataL);
-                })
-                .catch(() => {
-                  alert("error en cargar usuario: ");
-                    this.$emit('logOut');
-                });
-
-                return this.tipo;
-    },
-  }
+  },
 }
 </script>
 

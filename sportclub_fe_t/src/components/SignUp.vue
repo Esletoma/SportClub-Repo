@@ -1,7 +1,9 @@
 <template>
+
   <div class="signUp_user">
     <div class="container_signUp_user">
       <h2>Registrarse</h2>
+
       <form v-on:submit.prevent="processSignUp" >
         <input type="text" v-model="user.username" placeholder="Username">
         <br>
@@ -17,51 +19,62 @@
         <button type="submit">Registrarse</button>
       </form>
     </div>
+
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import gql from 'graphql-tag';
 
 export default {
   name: "SignUp",
 
   data: function(){
     return {
-
       user: {
         username: "",
         password: "",
         email: "",
-      }
-    }
+      },
+    };
   },
+
   methods: {
-      processSignUp: function(){
+      processSignUp: async function(){
         let t = 0;
         if(document.getElementById("checkCentro").checked){
           t = 1;
         }
-        axios.post(
-          "http://127.0.0.1:8000/user/",
-          this.user,
-          {headers: {}}
-        )
-        .then((result) => {
-            let dataSignUp = {
-              username: this.user.username,
-              token_access: result.data.access,
-              token_refresh: result.data.refresh,
-              tipo: t,
-            }
-            this.$emit('completedSignUp', dataSignUp)
-        })
-        .catch((error) => {
-          console.log(error)
-          alert("ERROR: Fallo en el registro. "+ error );
-        });
-    }
-  }
+        await this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation($userInput: SignUpInput!) {
+                signUpUser(userInput: $userInput) {
+                  refresh
+                  access
+                }
+              }
+            `,
+            variables: {
+              userInput: this.user,
+            },
+          })          
+          .then((result) => {
+              let dataSignUp = {
+                username: this.user.username,
+                token_access: result.data.access,
+                token_refresh: result.data.refresh,
+                tipo: t,
+              }
+              this.$emit('completedSignUp', dataSignUp)
+          })
+          .catch((error) => {
+            console.log(error)
+            alert("ERROR: Fallo en el registro. "+ error );
+          });
+      },
+
+    },
 }
 </script>
 
