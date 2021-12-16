@@ -2,8 +2,8 @@
     <div class="information">
         <h1>
             ¡Bienvenido
-            <span>{{ userDetailById.name }}</span
-            >!
+           <!-- <span>{{ userDetailById.name }}</span
+            >! -->
         </h1>
 
         <div class="details">
@@ -33,10 +33,14 @@ export default {
     data: function () {
         return {
             userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+        
             userDetailById: {
+                id:0,
                 username: "",
-                name: "",
+                password: "",
                 email: "",
+                tipo:0,
+                plan:0,
             },
         };
     },
@@ -46,9 +50,12 @@ export default {
             query: gql`
                 query ($userId: Int!) {
                     userDetailById(userId: $userId) {
+                        id
                         username
-                        name
+                        password
                         email
+                        tipo
+                        plan
                     }
                 }
             `,

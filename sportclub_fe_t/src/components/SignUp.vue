@@ -35,16 +35,20 @@ export default {
         username: "",
         password: "",
         email: "",
+        tipo:0,
+        plan:0,
       },
     };
   },
 
   methods: {
       processSignUp: async function(){
+        
         let t = 0;
         if(document.getElementById("checkCentro").checked){
           t = 1;
         }
+        this.user.tipo = t;
         await this.$apollo
           .mutate({
             mutation: gql`

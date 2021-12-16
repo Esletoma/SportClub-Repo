@@ -22,7 +22,6 @@ import gql from "graphql-tag";
 
 export default {
   name: "LogIn",
-  tipo: 0,
 
   data: function(){
     return {
@@ -30,6 +29,7 @@ export default {
         username:"",
         password:"",
       },
+      tipo: 0,
     };
   },
 
@@ -57,6 +57,7 @@ export default {
             tipo: this.tipo,
           }
 
+          alert("token refres: "+ dataLogIn.token_refresh)
           this.$emit('completedLogIn', dataLogIn);
         })
         .catch((error) => {

@@ -27,7 +27,6 @@ const authTypeDefs = gql `
         id: Int!
         username: String!
         password: String!
-        name: String!
         email: String!
         tipo: Int!
         plan: Int!

@@ -44,6 +44,8 @@ export default {
         this.$router.push({ name: "logIn" });
       else
         if(localStorage.getItem("tipo")== 0){
+          alert("Token Refresh: "+ localStorage.getItem("token_refresh"));
+          //alert(jwt_decode().user_id);
            this.$router.push({ name: "home" });
         }else{
           //this.$router.push({ name: "centro" });
@@ -68,6 +70,7 @@ export default {
       localStorage.setItem("token_refresh", data.token_refresh);
       localStorage.setItem("tipo", data.tipo);
       alert("Autenticación Exitosa");
+      alert("tipo: " + localStorage.getItem("tipo"));
       this.verifyAuth();
     },
     completedSignUp: function(data) {
